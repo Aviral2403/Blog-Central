@@ -19,6 +19,7 @@ and visually appealing presentation of content.
 3) Drafts and Edits: Users can save drafts of their posts, edit existing ones, or delete them if necessary, providing flexibility in content management.
 
 Content Exploration:
+
 4) Browse Posts: Users can browse through a diverse range of blog posts created by others. The platform’s intuitive design makes it easy to navigate through
 various categories and discover posts of interest.
 
