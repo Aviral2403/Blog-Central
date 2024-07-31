@@ -3,7 +3,7 @@ import { IoMdSearch } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useContext, useState } from "react";
 import Menu from "./Menu";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/UserContext";
 
 const Navbar = () => {
   const path = useLocation().pathname;
