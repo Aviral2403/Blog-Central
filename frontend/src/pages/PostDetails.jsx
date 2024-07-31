@@ -122,7 +122,7 @@ const PostDetails = () => {
         </div>
         <div className="flex items-center mt-8 space-x-4 font-semibold">
           <p>Categories:</p>
-          <div className="flex justify-center items-center space-x-2">
+          <div className="flex justify-center flex-wrap gap-x-4 gap-y-2 items-center space-x-2">
             {Array.isArray(post.categories) && post.categories.length > 0 ? (
               post.categories.map((c, i) => (
                 <div key={i} className="bg-gray-300 rounded-lg px-3 py-1">{c}</div>
