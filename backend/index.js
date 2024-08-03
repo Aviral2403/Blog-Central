@@ -18,7 +18,7 @@ const commentRoute = require('./routes/comments')
 dotenv.config();
 app.use(cors(
     {
-        origin: ["http://localhost:5173", "https://aviral-blog-central.vercel.app"],
+        origin: ["http://localhost:5173", "https://aviral-blog-central.vercel.app", "https://blogcentral-pwap.onrender.com"],
         credentials: true,
         exposedHeaders: ["Authorization"]
     }
