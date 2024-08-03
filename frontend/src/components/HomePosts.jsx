@@ -3,14 +3,14 @@ import { IF } from "../url";
 /* eslint-disable react/prop-types */
 const HomePosts = ({ post }) => {
   return (
-    <div className=" lg:px-16 w-full flex flex-col mt-8 space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+    <div className="lg:px-4 w-full flex flex-col mt-8 space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 ">
       {/* Post Title */}
       <h1 className="text-xl font-bold mb-1 sm:mb-2 sm:text-2xl lg:hidden">
         {post.title}
       </h1>
 
       {/* Post Image */}
-      <div className="w-full h-[40vh] sm:h-[40vh] md:h-[40vh] lg:w-[35%] lg:h-[200px] flex justify-center items-center">
+      <div className="w-full h-[40vh] sm:h-[40vh] md:h-[40vh] lg:w-[45%] lg:h-[200px] flex justify-center items-center">
         <img
           src={IF + post.photo}
           alt=""
