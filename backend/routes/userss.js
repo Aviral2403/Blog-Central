@@ -7,8 +7,13 @@ const Comment = require('../models/Comment');
 const verifyToken = require('../VerifyToken');
 
 // UPDATE USER
-router.put("/:id", verifyToken, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
+    const token = req.query.token;
+    const isValid = await verifyToken(token);
+    if (!isValid) {
+      return res.status(403).json("Not authenticated!");
+    }
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
       req.body.password = await bcrypt.hashSync(req.body.password, salt);
@@ -26,8 +31,13 @@ router.put("/:id", verifyToken, async (req, res) => {
 });
 
 // DELETE USER
-router.delete("/:id", verifyToken, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
+    const token = req.query.token;
+    const isValid = await verifyToken(token);
+    if (!isValid) {
+      return res.status(403).json("Not authenticated!");
+    }
     await User.findByIdAndDelete(req.params.id);
     await Post.deleteMany({ userId: req.params.id });
     await Comment.deleteMany({ userId: req.params.id });

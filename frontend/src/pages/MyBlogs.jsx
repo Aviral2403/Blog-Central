@@ -19,7 +19,11 @@ const MyBlogs = () => {
     if (!user) return; // Ensure user context is available before fetching posts
     setLoader(true);
     try {
-      const res = await axios.get(URL + "/api/posts/user/" + user._id);
+      const url = `${URL}/api/posts/user/${user._id}`;
+      const header = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const res = await axios.get(url, { headers: header });
       setPosts(res.data);
       setNoResults(res.data.length === 0);
     } catch (err) {

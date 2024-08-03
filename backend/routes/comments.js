@@ -1,47 +1,59 @@
-const express=require('express')
-const router=express.Router()
-const User=require('../models/User')
-const bcrypt=require('bcryptjs')
-const Post=require('../models/Post')
-const Comment=require('../models/Comment')
+const express = require('express')
+const router = express.Router()
+const User = require('../models/User')
+const bcrypt = require('bcryptjs')
+const Post = require('../models/Post')
+const Comment = require('../models/Comment')
 const verifyToken = require('../VerifyToken')
 
 //CREATE
-router.post("/create",verifyToken,async (req,res)=>{
-    try{
-        const newComment=new Comment(req.body)
-        const savedComment=await newComment.save()
+router.post("/create", async (req, res) => {
+    try {
+        const token = req.query.token;
+        const isValid = await verifyToken(token);
+        if (!isValid) {
+            return res.status(403).json("Not authenticated!");
+        }
+        const newComment = new Comment(req.body)
+        const savedComment = await newComment.save()
         res.status(200).json(savedComment)
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(err)
     }
-     
+
 })
 
 //UPDATE
-router.put("/:id",verifyToken,async (req,res)=>{
-    try{
-       
-        const updatedComment=await Comment.findByIdAndUpdate(req.params.id,{$set:req.body},{new:true})
+router.put("/:id", async (req, res) => {
+    try {
+        const token = req.query.token;
+        const isValid = await verifyToken(token);
+        if (!isValid) {
+            return res.status(403).json("Not authenticated!");
+        }
+        const updatedComment = await Comment.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
         res.status(200).json(updatedComment)
-
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(err)
     }
 })
 
 
 //DELETE
-router.delete("/:id",verifyToken,async (req,res)=>{
-    try{
+router.delete("/:id", async (req, res) => {
+    try {
+        const token = req.query.token;
+        const isValid = await verifyToken(token);
+        if (!isValid) {
+            return res.status(403).json("Not authenticated!");
+        }
         await Comment.findByIdAndDelete(req.params.id)
-        
         res.status(200).json("Comment has been deleted!")
 
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(err)
     }
 })
@@ -50,15 +62,15 @@ router.delete("/:id",verifyToken,async (req,res)=>{
 
 
 //GET POST COMMENTS
-router.get("/post/:postId",async (req,res)=>{
-    try{
-        const comments=await Comment.find({postId:req.params.postId})
+router.get("/post/:postId", async (req, res) => {
+    try {
+        const comments = await Comment.find({ postId: req.params.postId })
         res.status(200).json(comments)
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(err)
     }
 })
 
 
-module.exports=router
+module.exports = router

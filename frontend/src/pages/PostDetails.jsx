@@ -11,17 +11,22 @@ import { UserContext } from "../context/UserContext";
 
 const PostDetails = () => {
   const navigate = useNavigate()
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const { id: postId } = useParams();
-  const [comments , setComments] = useState([])//to display all coments 
-  const [comment , setComment] = useState("") // to add comment
+  const [comments, setComments] = useState([])//to display all coments 
+  const [comment, setComment] = useState("") // to add comment
   const [post, setPost] = useState({
     categories: [], // Ensure categories is always an array
   });
 
   const fetchPost = useCallback(async () => {
     try {
-      const res = await axios.get(`${URL}/api/posts/${postId}`);
+      const url = `${URL}/api/posts/${postId}`;
+      const header = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const res = await axios.get(url, { headers: header });
+
       setPost(res.data);
     } catch (err) {
       console.log(err);
@@ -42,48 +47,55 @@ const PostDetails = () => {
     ));
   };
 
-  const handleDeletePost = async()=>{
-    try{
-      const res=await axios.delete(URL+"/api/posts/"+postId,{withCredentials:true})
+  const handleDeletePost = async () => {
+    try {
+      const url = `${URL}/api/posts/${postId}?token=${localStorage.getItem("token")}`;
+      const header = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const res = await axios.delete(url, { headers: header });
       console.log(res)
       navigate("/")
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
 
   }
 
-  const fetchPostComments = async()=>{
-    try{
-      const res = await axios.get(URL+"/api/comments/post/"+postId)
+  const fetchPostComments = async () => {
+    try {
+      const header = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const res = await axios.get(URL + "/api/comments/post/" + postId, { headers: header })
       setComments(res.data)
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
-  useEffect(()=>{
+  useEffect(() => {
     fetchPostComments()
 
-  },[postId])
+  }, [postId])
 
-  const postComment = async(e)=>{
+  const postComment = async (e) => {
     e.preventDefault()
-    try{
-      const res = await axios.post(URL+'/api/comments/create',
-      {comment:comment,author:user.username,postId:postId,userId:user._id},
-      {withCredentials:true})
+    try {
+      const res = await axios.post(URL + '/api/comments/create?token=' + localStorage.getItem('token'),
+        { comment: comment, author: user.username, postId: postId, userId: user._id },
+        { withCredentials: true })
       window.location.reload(true)
 
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
 
-    
+
   }
 
   return (
@@ -94,8 +106,8 @@ const PostDetails = () => {
           <h1 className="text-2xl font-bold text-black md:text-3xl">
             {post.title}
           </h1>
-          {user?._id===post?.userId &&<div className="flex items-center justify-center space-x-2">
-            <p className="cursor-pointer" onClick={()=>navigate("/edit/"+postId)}>
+          {user?._id === post?.userId && <div className="flex items-center justify-center space-x-2">
+            <p className="cursor-pointer" onClick={() => navigate("/edit/" + postId)}>
               <FiEdit />
             </p>
             <p className="cursor-pointer" onClick={handleDeletePost}>
@@ -113,7 +125,7 @@ const PostDetails = () => {
         {post.photo && (
           <img
             className="w-full mx-auto mt-8 max-h-[400px] object-cover"
-            src={IF+post.photo}
+            src={IF + post.photo}
             alt=""
           />
         )}
@@ -134,14 +146,14 @@ const PostDetails = () => {
         </div>
         <div className="flex flex-col mt-4">
           <h3 className="mt-6 mb-4 font-semibold">Comments:</h3>
-          {comments?.map((c)=>(
-            <Comments key={c._id} c={c} post={post}/>
+          {comments?.map((c) => (
+            <Comments key={c._id} c={c} post={post} />
 
           ))}
         </div>
         <div className="w-full flex flex-col mt-4 md:flex-row">
           <input
-            onChange={(e)=>setComment(e.target.value)}
+            onChange={(e) => setComment(e.target.value)}
             type="text"
             placeholder="Write a comment"
             className="md:w-[80%] outline-none py-2 px-4 mt-4 md:mt-0"

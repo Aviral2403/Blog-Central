@@ -6,31 +6,32 @@ import { URL } from "../url";
 import { UserContext } from "../context/UserContext";
 
 const Login = () => {
-  const [email , setEmail] = useState("")
-  const [password , setPassword] = useState("")
-  const [error , setError] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState(false)
   const [loginSuccess, setloginSuccess] = useState(false);
-  const {setUser} = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
 
-  const handleLogin = async()=>{
-    try{
-      const res = await axios.post(URL + "/api/auth/login",{email, password},{withCredentials:true})
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post(URL + "/api/auth/login", { email, password }, { withCredentials: true })
+      console.log(res.data)
+      const token = res.data.token
+      localStorage.setItem('token', token)
       setloginSuccess(true)
-      setUser(res.data)
-      setTimeout(() => navigate('/'), 1000); 
-      //console.log(res.data)
+      setUser(res.data.user)
+      setTimeout(() => navigate('/'), 1000);
     }
-    catch(err){
+    catch (err) {
       setError(true)
       setloginSuccess(false)
       console.log(err)
-
     }
   }
 
-  
+
   return (
     <>
       <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
@@ -47,13 +48,13 @@ const Login = () => {
             Log in to your account
           </h1>
           <input
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 border-2 border-black outline-0"
             type="text"
             placeholder="Enter your Email"
           />
           <input
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 border-2 border-black outline-0"
             type="password"
             placeholder="Enter your Password"
@@ -73,7 +74,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

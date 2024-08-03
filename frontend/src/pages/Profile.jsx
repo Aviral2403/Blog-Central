@@ -20,7 +20,7 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get(URL + "/api/users/" + user._id);
+      const res = await axios.get(URL + "/api/users/" + user._id + "?token=" + localStorage.getItem("token"), { withCredentials: true });
       setUsername(res.data.username);
       setEmail(res.data.email);
       setPassword(res.data.password);
@@ -34,7 +34,7 @@ const Profile = () => {
   const handleUserUpdate = async () => {
     setUpdated(false);
     try {
-      await axios.put(URL + "/api/users/" + user._id, { username, email, password }, { withCredentials: true });
+      await axios.put(URL + "/api/users/" + user._id + "?token=" + localStorage.getItem("token"), { username, email, password }, { withCredentials: true });
       setUpdated(true);
       fetchUserPosts();
     } catch (err) {
@@ -45,7 +45,7 @@ const Profile = () => {
 
   const handleUserDelete = async () => {
     try {
-      await axios.delete(URL + "/api/users/" + user._id, { withCredentials: true });
+      await axios.delete(URL + "/api/users/" + user._id + "?token=" + localStorage.getItem("token"), { withCredentials: true });
       setUser(null);
       navigate("/");
     } catch (err) {
@@ -55,7 +55,11 @@ const Profile = () => {
 
   const fetchUserPosts = async () => {
     try {
-      const res = await axios.get(URL + "/api/posts/user/" + user._id);
+      const url = `${URL}/api/posts/user/${user._id}`;
+      const header = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const res = await axios.get(url, { headers: header });
       setPosts(res.data);
     } catch (err) {
       console.log(err);

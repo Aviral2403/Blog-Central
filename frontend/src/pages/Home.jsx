@@ -18,7 +18,11 @@ const Home = () => {
   const fetchPosts = useCallback(async () => {
     setLoader(true); // Set loader to true before fetching
     try {
-      const res = await axios.get(`${URL}/api/posts${search}`);
+      const url = `${URL}/api/posts${search}`;
+      const header = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const res = await axios.get(url, { headers: header });
       setPosts(res.data);
       if (res.data.length === 0) {
         setNoResults(true);

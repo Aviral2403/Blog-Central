@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
-const multer  = require('multer')
-const path=require("path")
+const multer = require('multer')
+const path = require("path")
 const cors = require('cors')
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -16,26 +16,32 @@ const commentRoute = require('./routes/comments')
 
 //middlewares
 dotenv.config();
-app.use(cors({origin:"https://blogcentral-pwap.onrender.com",credentials:true}))
-app.use("/images",express.static(path.join(__dirname,"/images")))
+app.use(cors(
+    {
+        origin: ["http://localhost:5173", "https://aviral-blog-central.vercel.app"],
+        credentials: true,
+        exposedHeaders: ["Authorization"]
+    }
+))
+app.use("/images", express.static(path.join(__dirname, "/images")))
 app.use(express.json());
 app.use(cookieParser())
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/posts', postRoute);
-app.use('/api/comments',commentRoute)
+app.use('/api/comments', commentRoute)
 
 //Image Upload
 const storage = multer.diskStorage({
-    destination:(req,file,fn)=>{
-        fn(null,"images")
+    destination: (req, file, fn) => {
+        fn(null, "images")
     },
-    filename:(req,file,fn)=>{
-        fn(null,req.body.img)
+    filename: (req, file, fn) => {
+        fn(null, req.body.img)
     }
 })
-const upload = multer({storage:storage})
-app.post('/api/upload',upload.single("file"),(req,res)=>{
+const upload = multer({ storage: storage })
+app.post('/api/upload', upload.single("file"), (req, res) => {
     res.status(200).json("Image Uploaded Sucessfully")
 })
 
