@@ -68,7 +68,7 @@ const PostDetails = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `${URL}/api/comments/create`,
+        `${URL}/api/comments/create?token=${localStorage.getItem("token")}`,
         { comment: comment, author: user.username, postId: postId, userId: user._id },
         { withCredentials: true }
       );
