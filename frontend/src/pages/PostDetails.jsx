@@ -43,7 +43,7 @@ const PostDetails = () => {
 
   const handleDeletePost = async () => {
     try {
-      const res = await axios.delete(`${URL}/api/posts/${postId}`, { withCredentials: true });
+      const res = await axios.delete(`${URL}/api/posts/${postId}?token=` + localStorage.getItem('token'), { withCredentials: true })
       console.log(res);
       navigate("/");
     } catch (err) {

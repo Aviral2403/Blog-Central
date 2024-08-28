@@ -10,7 +10,7 @@ const Comment = ({ c }) => {
 
   const deleteComment = async (id) => {
     try {
-      await axios.delete(`${URL}/api/comments/${id}`, { withCredentials: true });
+      await axios.delete(`${URL}/api/comments/${id}?token=` + localStorage.getItem('token'), { withCredentials: true });
       window.location.reload(true);
     } catch (err) {
       console.log(err);
